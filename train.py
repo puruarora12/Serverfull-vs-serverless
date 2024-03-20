@@ -1,5 +1,5 @@
 import time
-
+from api.py import upload_file
 
 def create_mnist_model():
   from keras.layers import Conv2D, MaxPool2D, Flatten, Dense, Dropout
@@ -115,7 +115,7 @@ def train(dataset_path):
     
     s = time.time()
     test_history = evaluate_mnist(model, xtest, ytest)
-    run_time_process = int(time.time() - s)
+    run_time_evalute = int(time.time() - s)
   
   elif nameOfDataset == "boston":
     s = time.time()
@@ -129,7 +129,13 @@ def train(dataset_path):
   
     s = time.time()
     test_history = evaluate_boston()
-    run_time_process = int(time.time() - s)
+    run_time_evaluate = int(time.time() - s)
+
+
+  #To Complete - Make a graph of All run times with name of dataset. use upload_file from import to upload the file to S3 bucket.
+  #To use upload complete, first save the image, use the save directory path as file path, bucket as name of S3 Bucket and key as the address of file in bucket. 
+  #file_path = '/path/to/your/image.png' ; bucket = 'bucket-name' ; key = 'path/to/destination/in/bucket/image.png'
+
 
 def predict(testData):
   
