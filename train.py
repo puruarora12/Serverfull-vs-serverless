@@ -99,32 +99,48 @@ def evaluate_boston(model):
   acc = model.predict(xtest)
   return (r2_score(ytest, acc))*100
 
-
-if data == "mnist":
-  s = time.time()
-  xtrain,xtest,ytrain,ytest = process_mnist()
-  run_time_process = int(time.time() - s)
-
-  s = time.time()
-  model = create_mnist_model()
-  train_history, model = train_mnist(model, xtrain,ytrain)
-  run_time_train = int(time.time() - s)
+def train(dataset_path):
+  dataset = load_dataset_from_file(dataset_path)
+  nameOfDataset = dataset.split("/")[-1]
   
-  s = time.time()
-  test_history = evaluate_mnist(model, xtest, ytest)
-  run_time_process = int(time.time() - s)
+  if nameOfDataset == "mnist":
+    s = time.time()
+    xtrain,xtest,ytrain,ytest = process_mnist()
+    run_time_process = int(time.time() - s)
+  
+    s = time.time()
+    model = create_mnist_model()
+    train_history, model = train_mnist(model, xtrain,ytrain)
+    run_time_train = int(time.time() - s)
+    
+    s = time.time()
+    test_history = evaluate_mnist(model, xtest, ytest)
+    run_time_process = int(time.time() - s)
+  
+  elif nameOfDataset == "boston":
+    s = time.time()
+    xtrain,xtest,ytrain,ytest = process_boston()
+    run_time_process = int(time.time() - s)
+  
+    s = time.time()
+    model = create_boston_model()
+    train_history, model = train_boston(model,xtrain,ytrain)
+    run_time_train = int(time.time() - s)
+  
+    s = time.time()
+    test_history = evaluate_boston()
+    run_time_process = int(time.time() - s)
 
-elif data == "boston":
-  s = time.time()
-  xtrain,xtest,ytrain,ytest = process_boston()
-  run_time_process = int(time.time() - s)
+def predict(testData):
+  
+  testData = load_dataset_from_file(testData)
+  nameOfData = testData.split("/")[-1]
 
-  s = time.time()
-  model = create_boston_model()
-  train_history, model = train_boston(model,xtrain,ytrain)
-  run_time_train = int(time.time() - s)
+  if nameOfData == 'mnist':
+    #to complete
 
-  s = time.time()
-  test_history = evaluate_boston()
-  run_time_process = int(time.time() - s)
+  elif nameOfData=='boston':
+    #to complete
+      
+    
 
