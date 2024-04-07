@@ -134,7 +134,7 @@ def train(dataset_path):
     s = time.time()
     test_history = evaluate_boston(model, xtest, ytest)
     run_time_evaluate = int(time.time() - s)
-  return run_time_process, run_time_train, run_time_evaluate
+  return {"process run time" : run_time_process, "training run time" : run_time_train, "evaluation run time" : run_time_evaluate}
 
 
   #To Complete - Make a graph of All run times with name of dataset. use upload_file from import to upload the file to S3 bucket.
@@ -155,3 +155,6 @@ def predict(testData):
       
     
 
+if __name__ == "__main__":
+    mnist_resutls = train("/mnist")
+    boston_results = train("/boston")
