@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify
 import boto3
 import os
 import tempfile
-from run.py import run
 
 app = Flask(__name__)
 s3_client = boto3.client('s3')

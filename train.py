@@ -1,5 +1,9 @@
 import time
-from api.py import upload_file
+from api import upload_file
+
+def load_dataset_from_file(dataset_path):
+  # TODO
+  pass
 
 def create_mnist_model():
   from keras.layers import Conv2D, MaxPool2D, Flatten, Dense, Dropout
@@ -31,7 +35,7 @@ def process_mnist():
   ytest=to_categorical(ytest)
   return xtrain,xtest,ytrain,ytest
 
-def train_mnist(model, xtrain,ytrain):
+def train_mnist(model, xtrain,ytrain, xtest, ytest):
   history = model.fit(xtrain, ytrain, epochs=9, batch_size=256, validation_data=(xtest, ytest))
   return history, model
 
@@ -73,11 +77,11 @@ def process_boston():
   xtrain,xtest,ytrain,ytest= train_test_split(X,Y,test_size=0.20)
   return xtrain,xtest,ytrain,ytest
 
-def create_boston_model():
+def create_boston_model(input_shape):
   from keras.models import Sequential
   from keras.layers import Dense
   model = Sequential()
-  model.add(Dense(units=12, input_dim=X.shape[1], activation='relu'))
+  model.add(Dense(units=12, input_dim=input_shape, activation='relu'))
   model.add(Dense(units=6, activation='relu'))
   model.add(Dense(units=1, activation='linear'))
   model.compile(optimizer='sgd',loss='mean_squared_error',metrics=['mse','mae'])
@@ -94,7 +98,7 @@ def train_boston(model, xtrain, ytrain):
   history = model.fit(xtrain,ytrain,batch_size=10,epochs=100,validation_split=0.3)
   return history, model
 
-def evaluate_boston(model):
+def evaluate_boston(model, xtest, ytest):
   from sklearn.metrics import r2_score
   acc = model.predict(xtest)
   return (r2_score(ytest, acc))*100
@@ -115,7 +119,7 @@ def train(dataset_path):
     
     s = time.time()
     test_history = evaluate_mnist(model, xtest, ytest)
-    run_time_evalute = int(time.time() - s)
+    run_time_evaluate = int(time.time() - s)
   
   elif nameOfDataset == "boston":
     s = time.time()
@@ -123,13 +127,14 @@ def train(dataset_path):
     run_time_process = int(time.time() - s)
   
     s = time.time()
-    model = create_boston_model()
+    model = create_boston_model(xtrain.shape[1])
     train_history, model = train_boston(model,xtrain,ytrain)
     run_time_train = int(time.time() - s)
   
     s = time.time()
-    test_history = evaluate_boston()
+    test_history = evaluate_boston(model, xtest, ytest)
     run_time_evaluate = int(time.time() - s)
+  return run_time_process, run_time_train, run_time_evaluate
 
 
   #To Complete - Make a graph of All run times with name of dataset. use upload_file from import to upload the file to S3 bucket.
@@ -142,11 +147,11 @@ def predict(testData):
   testData = load_dataset_from_file(testData)
   nameOfData = testData.split("/")[-1]
 
+  # TODO
   if nameOfData == 'mnist':
-    #to complete
-
+    pass
   elif nameOfData=='boston':
-    #to complete
+    pass
       
     
 
